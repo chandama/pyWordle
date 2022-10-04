@@ -12,7 +12,7 @@ from WordleGraphics import WordleGWindow, N_COLS, N_ROWS
 def wordle():
   # Set the secret word
   secretWord = random.choice(FIVE_LETTER_WORDS)
-
+  print(secretWord)
 
   def increment_row(row):
     # Increment row if all guesses are not filled
@@ -21,13 +21,22 @@ def wordle():
       gw.set_current_row(row)
     elif row == 5:
       gw.show_message(secretWord)
-      # TODO: Add code here to lock keyboard and game state
+      # TODO: Add code here for LOSS end game state
 
+  def color_letters(guess,row):
+    i = 0
+    for x, y in zip(guess, secretWord):
+      if x==y:
+        gw.set_square_color(row,i,"#66BB66")
+        i+=1
+      else:
+        i+=1
+        
+  
   def enter_action(s):
-    # gw.show_message("You have to implement this method.")
-
-    #Milestone 1:
     
+    # gw.show_message("You have to implement this method.")
+    #Milestone 1:
     # for x in range(N_ROWS):
     #   for y in range(N_COLS):
     #     gw.set_square_letter(x,y,secretWord[y])
@@ -48,22 +57,29 @@ def wordle():
         inList = True
 
     # Print secret word in console for testing
-    print(secretWord)
+    #print(secretWord)
     
     #Show user if it is word list
-    if userGuess == secretWord:
-      gw.show_message("Congrats")
-    elif inList == True:
-      gw.show_message("In word list")
-      increment_row(rowNum)
-    elif inList == False:
+    if inList == False:
+      
       # Clear row and reset if userGuess isn't a valid word
       gw.show_message("Not in word list")
+      
       for x in range(N_COLS):
         gw.set_square_letter(rowNum,x,'')
+        
       gw.set_current_row(rowNum)
       
-        
+    elif inList == True and userGuess != secretWord:
+      gw.show_message("In word list") 
+      color_letters(userGuess, rowNum)
+      increment_row(rowNum)   
+      
+    elif userGuess == secretWord:
+      color_letters(userGuess, rowNum)
+      gw.show_message("Congrats")
+      # TODO: Add code here for WIN game state
+
   gw = WordleGWindow()
   gw.add_enter_listener(enter_action)
 
