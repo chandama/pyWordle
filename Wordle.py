@@ -1,7 +1,8 @@
 # File: Wordle.py
 """
-This module is the starter file for the Wordle assignment.
-BE SURE TO UPDATE THIS COMMENT WHEN YOU WRITE THE CODE.
+pyWordle
+IS 562 - Project Management - Hilton
+Members: Chandler Taylor, Ali Smith, Michael Pisicone, David Jensen, Keanna Nebrotzky, Nathan Hansen
 """
 
 import random
