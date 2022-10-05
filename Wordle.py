@@ -1,7 +1,8 @@
 # File: Wordle.py
 """
-This module is the starter file for the Wordle assignment.
-BE SURE TO UPDATE THIS COMMENT WHEN YOU WRITE THE CODE.
+pyWordle
+IS 562 - Project Management - Hilton
+Members: Chandler Taylor, Ali Smith, Michael Pisicone, David Jensen, Keanna Nebrotzky, Nathan Hansen
 """
 
 import random
@@ -24,15 +25,22 @@ def wordle():
       # TODO: Add code here for LOSS end game state
 
   def color_letters(guess,row):
-    i = 0
-    for x, y in zip(guess, secretWord):
-      if x==y:
-        gw.set_square_color(row,i,"#66BB66")
-        i+=1
-      else:
-        i+=1
-        
-  
+    duplicates = set()
+    # First find and color correct positions green
+    for x,y in enumerate(guess):
+      if secretWord[x] == guess[x]:
+        gw.set_square_color(row,x,"#66BB66")
+        duplicates.add(x)
+    # Yellow letter code
+    # If guess_char exists in userGuess and x != green, search for all other values of character, find their positions, and color the appropriate number yellow
+    for x, guess_char in enumerate(guess):
+      if guess_char in secretWord and gw.get_square_color(row,x) != "#66BB66":
+        print(x)
+
+
+  # def is_word(guess):
+    
+
   def enter_action(s):
     
     # gw.show_message("You have to implement this method.")
@@ -51,6 +59,7 @@ def wordle():
       userGuess = (userGuess + gw.get_square_letter(rowNum,x)).lower()
 
     #Compare userGuess to each word in word list
+    # inlist = is_word(userGuess)
     inList = False
     for x in range(len(FIVE_LETTER_WORDS)):
       if userGuess == FIVE_LETTER_WORDS[x]:
