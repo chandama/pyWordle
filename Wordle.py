@@ -13,7 +13,7 @@ from collections import Counter
 def wordle():
   # Set the secret word
   # secretWord = random.choice(FIVE_LETTER_WORDS)
-  secretWord = "sassy"
+  secretWord = "trump"
   print(secretWord)
 
   def increment_row(row):
@@ -31,32 +31,21 @@ def wordle():
         for xGuess,yGuess in enumerate(guess):
 
             if guess[xGuess] in secretWord:
-                letterCount = lettersCount[yGuess]
                 if secretWord[xGuess] == guess[xGuess]:
                     gw.set_square_color(row, xGuess, CORRECT_COLOR)
-                    letterCount = letterCount - 1
-                
-                for xWord, yWord in enumerate(secretWord):
-                    if secretWord[xWord] == guess[xGuess] and gw.get_square_color(row, xGuess) != CORRECT_COLOR:
-                        if letterCount != 0:
-                            gw.set_square_color(row, xGuess, PRESENT_COLOR)
-                            letterCount = letterCount - 1
+                    lettersCount[yGuess] = lettersCount[yGuess] - 1
+                else:
+                  gw.set_square_color(row, xGuess, MISSING_COLOR)
             else:
-                gw.set_square_color(row, xGuess, MISSING_COLOR)
+              gw.set_square_color(row, xGuess, MISSING_COLOR)  
+              
+        for xGuess,yGuess in enumerate(guess):
+          for xWord, yWord in enumerate(secretWord):
+            if guess[xWord] in secretWord and lettersCount[yGuess] >= 1:
+              if gw.get_square_color(row, xGuess) != CORRECT_COLOR:
+                gw.set_square_color(row, xGuess, PRESENT_COLOR)
+                lettersCount[yGuess] = lettersCount[yGuess] - 1
             
-          
-      
-    
-    # Yellow letter code
-      # elif secretWord[x] in guess[x]:
-      #   gw.set_square_color(row, x, PRESENT_COLOR)
-        
-        # Grays out used letters that aren't in word
-      #   gw.set_square_color(row, x, MISSING_COLOR)
-
-
-
-
   def enter_action(s):
 
     # gw.show_message("You have to implement this method.")
@@ -79,9 +68,6 @@ def wordle():
     for x in range(len(FIVE_LETTER_WORDS)):
       if userGuess == FIVE_LETTER_WORDS[x]:
         inList = True
-
-    # Print secret word in console for testing
-    #print(secretWord)
 
     #Show user if it is word list
     if inList == False:
