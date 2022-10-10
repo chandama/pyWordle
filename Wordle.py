@@ -2,7 +2,7 @@
 """
 pyWordle
 IS 562 - Project Management - Hilton
-Members: Chandler Taylor, Ali Smith, Michael Pisicone, David Jensen, Keanna Nebrotzky, Nathan Hansen
+Members: Chandler Taylor, Ali Smith, Michael Pisicone, David Jensen, Keanna Nabrotzky, Nathan Hansen
 """
 
 import random
@@ -10,10 +10,13 @@ from WordleDictionary import FIVE_LETTER_WORDS
 from WordleGraphics import WordleGWindow, N_COLS, N_ROWS, CORRECT_COLOR, MISSING_COLOR, PRESENT_COLOR, KEY_COLOR
 from collections import Counter
 
+
 def wordle():
+  gw = WordleGWindow()
+
   # Set the secret word
-  # secretWord = random.choice(FIVE_LETTER_WORDS)
-  secretWord = "trump"
+  secretWord = random.choice(FIVE_LETTER_WORDS)
+  # secretWord = "sassy"
   print(secretWord)
 
   def increment_row(row):
@@ -26,26 +29,32 @@ def wordle():
       # TODO: Add code here for LOSS end game state
       gw.show_message("Try again next time")
 
-  def color_letters(guess,row):
-        lettersCount = Counter(secretWord)
-        for xGuess,yGuess in enumerate(guess):
+  # Milestone 3
+  def color_letters(guess, row):
+    # Create dictionary of letter counts in secretWord
+    lettersCount = Counter(secretWord)
+    # Loop through guess word to find green letters
+    for xGuess, yGuess in enumerate(guess):
+      if secretWord[xGuess] == yGuess:
+        gw.set_square_color(row, xGuess, CORRECT_COLOR)
+        gw.set_key_color(yGuess.upper(), CORRECT_COLOR)
 
-            if guess[xGuess] in secretWord:
-                if secretWord[xGuess] == guess[xGuess]:
-                    gw.set_square_color(row, xGuess, CORRECT_COLOR)
-                    lettersCount[yGuess] = lettersCount[yGuess] - 1
-                else:
-                  gw.set_square_color(row, xGuess, MISSING_COLOR)
-            else:
-              gw.set_square_color(row, xGuess, MISSING_COLOR)  
-              
-        for xGuess,yGuess in enumerate(guess):
-          for xWord, yWord in enumerate(secretWord):
-            if guess[xWord] in secretWord and lettersCount[yGuess] >= 1:
-              if gw.get_square_color(row, xGuess) != CORRECT_COLOR:
-                gw.set_square_color(row, xGuess, PRESENT_COLOR)
-                lettersCount[yGuess] = lettersCount[yGuess] - 1
-            
+        lettersCount[yGuess] = lettersCount[yGuess] - 1
+      else:
+        gw.set_square_color(row, xGuess, MISSING_COLOR)
+        if gw.get_key_color(yGuess.upper()) != CORRECT_COLOR:
+          gw.set_key_color(yGuess.upper(), MISSING_COLOR)
+    #Loop through guess word to find yellow letters
+    for xGuess, yGuess in enumerate(guess):
+      for xWord, yWord in enumerate(secretWord):
+        if yGuess in secretWord and lettersCount[
+            yGuess] >= 1 and gw.get_square_color(row, xGuess) != CORRECT_COLOR:
+          gw.set_square_color(row, xGuess, PRESENT_COLOR)
+          if gw.get_key_color(yGuess.upper()) != CORRECT_COLOR:
+            gw.set_key_color(yGuess.upper(), PRESENT_COLOR)
+
+          lettersCount[yGuess] = lettersCount[yGuess] - 1
+
   def enter_action(s):
 
     # gw.show_message("You have to implement this method.")
@@ -90,7 +99,6 @@ def wordle():
       gw.show_message("Congrats!")
       # TODO: Add code here for WIN game state
 
-  gw = WordleGWindow()
   gw.add_enter_listener(enter_action)
 
 
